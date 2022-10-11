@@ -6,7 +6,7 @@
  */
 void monty_push(stack_t **stack, unsigned int line_number)
 {
-	stack_t *tmp, *new;
+	stack_t *new;
 	int i;
 
 	new = malloc(sizeof(stack_t));
@@ -31,6 +31,18 @@ void monty_push(stack_t **stack, unsigned int line_number)
 		}
 	}
 	new->n = atoi(op_toks[1]);
+	monty_push2(stack, new);
+}
+/**
+ * monty_push2 - Pushes a value to a stack_t linked list.
+ * @stack: A pointer to the top mode node of a stack_t linked list.
+ * @new: A pointer to the top mode node of a stack_t linked list.
+ * @temp: A pointer to the top mode node of a stack_t linked list.
+ */
+void monty_push2(stack_t **stack, stack_t *new)
+{
+	stack_t *tmp;
+
 	if (check_mode(*stack) == STACK) /* STACK mode insert at front */
 	{
 		tmp = (*stack)->next;

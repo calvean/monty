@@ -53,6 +53,7 @@ void set_op_tok_error(int error_code);
 
 /* OPCODE FUNCTIONS */
 void monty_push(stack_t **stack, unsigned int line_number);
+void monty_push2(stack_t **stack, stack_t *new);
 void monty_pall(stack_t **stack, unsigned int line_number);
 void monty_pint(stack_t **stack, unsigned int line_number);
 void monty_pop(stack_t **stack, unsigned int line_number);
