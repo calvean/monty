@@ -1,16 +1,27 @@
 #include "monty.h"
 
 /**
- * rotr - rotates the stack to the bottom.
- * @stack: double pointer to the begining of the linked list
- * @line_number: script line number
- *
- * Return: void
+ * monty_rotr - Rotates the bottom value of a stack_t linked list to the top.
+ * @stack: A pointer to the top mode node of a stack_t linked list.
+ * @line_number: The current working line number of a Monty bytecodes file.
  */
-void rotr(stack_t **stack, unsigned int line_number)
+void monty_rotr(stack_t **stack, unsigned int line_number)
 {
-	(void)line_number;
+	stack_t *top, *bottom;
 
-	if (*stack)
-		*stack = (*stack)->prev;
+	if ((*stack)->next == NULL || (*stack)->next->next == NULL)
+		return;
+
+	top = (*stack)->next;
+	bottom = (*stack)->next;
+	while (bottom->next != NULL)
+		bottom = bottom->next;
+
+	bottom->prev->next = NULL;
+	(*stack)->next = bottom;
+	bottom->prev = *stack;
+	bottom->next = top;
+	top->prev = bottom;
+
+	(void)line_number;
 }

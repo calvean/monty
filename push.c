@@ -1,51 +1,52 @@
 #include "monty.h"
-#include <ctype.h>
-
 /**
- * check_for_digit - checks that a string only contains digits
- * @arg: string to check
- *
- * Return: 0 if only digits, else 1
+ * monty_push - Pushes a value to a stack_t linked list.
+ * @stack: A pointer to the top mode node of a stack_t linked list.
+ * @line_number: The current working line number of a Monty bytecodes file.
  */
-static int check_for_digit(char *arg)
+void monty_push(stack_t **stack, unsigned int line_number)
 {
+	stack_t *tmp, *new;
 	int i;
 
-	for (i = 0; arg[i]; i++)
+	new = malloc(sizeof(stack_t));
+	if (new == NULL)
 	{
-		if (arg[i] == '-' && i == 0)
+		set_op_tok_error(malloc_error());
+		return;
+	}
+	if (op_toks[1] == NULL)
+	{
+		set_op_tok_error(no_int_error(line_number));
+		return;
+	}
+	for (i = 0; op_toks[1][i]; i++)
+	{
+		if (op_toks[1][i] == '-' && i == 0)
 			continue;
-		if (isdigit(arg[i]) == 0)
-			return (1);
+		if (op_toks[1][i] < '0' || op_toks[1][i] > '9')
+		{
+			set_op_tok_error(no_int_error(line_number));
+			return;
+		}
 	}
-	return (0);
-}
-
-/**
- * m_push - push an integer onto the stack
- * @stack: double pointer to the beginning of the stack
- * @line_number: script line number
- *
- * Return: void
- */
-void m_push(stack_t **stack, unsigned int line_number)
-{
-	char *arg;
-	int n;
-
-	arg = strtok(NULL, "\n\t\r ");
-	if (arg == NULL || check_for_digit(arg))
+	new->n = atoi(op_toks[1]);
+	if (check_mode(*stack) == STACK) /* STACK mode insert at front */
 	{
-		dprintf(STDOUT_FILENO,
-			"L%u: usage: push integer\n",
-			line_number);
-		exit(EXIT_FAILURE);
+		tmp = (*stack)->next;
+		new->prev = *stack;
+		new->next = tmp;
+		if (tmp)
+			tmp->prev = new;
+		(*stack)->next = new;
 	}
-	n = atoi(arg);
-	if (!add_node(stack, n))
+	else /* QUEUE mode insert at end */
 	{
-		dprintf(STDOUT_FILENO, "Error: malloc failed\n");
-		exit(EXIT_FAILURE);
+		tmp = *stack;
+		while (tmp->next)
+			tmp = tmp->next;
+		new->prev = tmp;
+		new->next = NULL;
+		tmp->next = new;
 	}
-	var.stack_len++;
 }

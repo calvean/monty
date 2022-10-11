@@ -1,26 +1,18 @@
 #include "monty.h"
 
 /**
- * m_pall - print all values on `stack' starting from the top
- * @stack: double pointer to head of stack
- * @line_number: line number being executed from script file
- *
- * Return: void
+ * monty_pall - Prints the values of a stack_t linked list.
+ * @stack: A pointer to the top mode node of a stack_t linked list.
+ * @line_number: The current working line number of a Monty bytecodes file.
  */
-void m_pall(stack_t **stack, unsigned int line_number)
+void monty_pall(stack_t **stack, unsigned int line_number)
 {
-	stack_t *head;
+	stack_t *tmp = (*stack)->next;
 
-	(void)(line_number);
-
-	head = *stack;
-	while (head != NULL)
+	while (tmp)
 	{
-		printf("%d\n", head->n);
-		head = head->next;
-		if (head == *stack)
-		{
-			return;
-		}
+		printf("%d\n", tmp->n);
+		tmp = tmp->next;
 	}
+	(void)line_number;
 }
